@@ -1,0 +1,14 @@
+  - name: Set date
+    set_fact:
+      change_date: "{{ ansible_date_time.date }}"
+
+  - assert:
+      that:
+        -  change_request is defined
+      msg: "define change_request as extra var '-e change_request=<>'"
+
+  - name: Creating Checkpoint
+    nxos_rollback:
+      checkpoint_file: "{{ change_date }}_-_CR{{ change_request }}.cfg"
+      provider: "{{ nxos_cli }}"
+    register: rollback_checkpoint
